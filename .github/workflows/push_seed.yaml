@@ -46,8 +46,10 @@ jobs:
           docker cp $(docker create iamrajranjan/image_repo):/docker-entrypoint-initdb.d/. seed/data/
 
       - name: Build Docker Image
+        if: steps.schema-check.outputs.changed == 'true'
         run: yarn seed:build
 
       - name: Push Changes
+        if: steps.schema-check.outputs.changed == 'true'
         run: yarn seed:push
 
