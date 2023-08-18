@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - schema.sql
 
 jobs:
   build-and-deploy:
@@ -12,19 +14,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Check for schema.sql changes
-        id: schema-check
-        run: |
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "schema.sql"; then
-          echo "schema.sql changed"
-          echo "::set-output name=changed::true"
-          else
-          echo "schema.sql not changed"
-          echo "::set-output name=changed::false"
-          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -39,17 +28,14 @@ jobs:
 
 
       - name: Pull Docker Image and Copy Data
-        if: steps.schema-check.outputs.changed == 'true'
         run: |
           docker pull iamrajranjan/image_repo
           mkdir -p seed/data
           docker cp $(docker create iamrajranjan/image_repo):/docker-entrypoint-initdb.d/. seed/data/
 
       - name: Build Docker Image
-        if: steps.schema-check.outputs.changed == 'true'
         run: yarn seed:build
 
       - name: Push Changes
-        if: steps.schema-check.outputs.changed == 'true'
         run: yarn seed:push
 
