@@ -7,7 +7,6 @@
       	"scripts": {
 		"seed:build": "cp schema.sql seed/data/00000_schema.sql && docker build -t raj_image ./seed",
 		"seed:push": "docker tag raj_image iamrajranjan/image_repo && docker push iamrajranjan/image_repo",
-		"seed:pull": "docker pull iamrajranjan/image_repo",
-		"seed:start": ""
+		"seed:pull": "docker rm image-container; docker image rm iamrajranjan/image_repo; docker create -p 5432:5432 --name image-container iamrajranjan/image_repo"
 	}
 }
