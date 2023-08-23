@@ -24,9 +24,9 @@ jobs:
 
       - name: Pull Seed Docker Image and Copy Data
         run: |
-          docker pull iamrajranjan/image_repo
+          docker pull ${{ secrets.DOCKER_SEED_DATA_IMAGE }}
           mkdir -p seed/data
-          docker cp $(docker create iamrajranjan/image_repo):/docker-entrypoint-initdb.d/. seed/data/
+          docker cp $(docker create ${{ secrets.DOCKER_SEED_DATA_IMAGE }}):/docker-entrypoint-initdb.d/. seed/data/
 
       - name: Build Docker Image
         run: yarn seed:build
