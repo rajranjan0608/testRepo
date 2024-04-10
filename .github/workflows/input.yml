@@ -26,4 +26,4 @@ jobs:
 
     steps:
     - name: Send greeting
-      run: echo "${{ github.event.inputs.message }} Custome Input:${{ github.even.inputs.custom_input }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+      run: echo "${{ github.event.inputs.message }} Custome Input:${{ github.event.inputs.custom_input }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
